@@ -19,9 +19,14 @@
     "publint": "publint",
     "test": "echo 'done'"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": [
+    "node",
+    "test",
+    "snapshot"
+  ],
+  "repository": "github.com/barelyhuman/node-snapshot",
+  "author": "reaper<ahoy@barelyhuman.dev>",
+  "license": "MIT",
   "devDependencies": {
     "bumpp": "^9.4.1",
     "pretty-format": "^29.7.0",
