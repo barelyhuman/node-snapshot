@@ -1,8 +1,15 @@
 {
   "name": "@barelyhuman/node-snapshot",
   "version": "0.0.1",
+  "keywords": [
+    "node",
+    "test",
+    "snapshot"
+  ],
+  "repository": "github.com/barelyhuman/node-snapshot",
+  "license": "MIT",
+  "author": "reaper<ahoy@barelyhuman.dev>",
   "type": "module",
-  "types": "./src/snapshot.d.ts",
   "exports": {
     "./package.json": "./package.json",
     ".": {
@@ -10,30 +17,23 @@
       "import": "./src/snapshot.js"
     }
   },
+  "main": "./src/snapshot.js",
+  "types": "./src/snapshot.d.ts",
   "files": [
     "src"
   ],
-  "main": "./src/snapshot.js",
   "scripts": {
     "next": "bumpp",
     "publint": "publint",
     "test": "echo 'done'"
   },
-  "keywords": [
-    "node",
-    "test",
-    "snapshot"
-  ],
-  "repository": "github.com/barelyhuman/node-snapshot",
-  "author": "reaper<ahoy@barelyhuman.dev>",
-  "license": "MIT",
+  "dependencies": {
+    "diff": "^5.2.0",
+    "kleur": "^4.1.5"
+  },
   "devDependencies": {
     "bumpp": "^9.4.1",
     "pretty-format": "^29.7.0",
     "publint": "^0.2.8"
-  },
-  "dependencies": {
-    "diff": "^5.2.0",
-    "kleur": "^4.1.5"
   }
 }
