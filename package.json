@@ -15,6 +15,7 @@
   ],
   "main": "./src/snapshot.js",
   "scripts": {
+    "next": "bumpp",
     "publint": "publint",
     "test": "echo 'done'"
   },
@@ -22,6 +23,7 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "bumpp": "^9.4.1",
     "pretty-format": "^29.7.0",
     "publint": "^0.2.8"
   },
