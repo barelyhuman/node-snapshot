@@ -1,0 +1,32 @@
+{
+  "name": "@barelyhuman/node-snapshot",
+  "version": "0.0.0",
+  "type": "module",
+  "types": "./src/snapshot.d.ts",
+  "exports": {
+    "./package.json": "./package.json",
+    ".": {
+      "types": "./src/snapshot.d.ts",
+      "import": "./src/snapshot.js"
+    }
+  },
+  "files": [
+    "src"
+  ],
+  "main": "./src/snapshot.js",
+  "scripts": {
+    "publint": "publint",
+    "test": "echo 'done'"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "pretty-format": "^29.7.0",
+    "publint": "^0.2.8"
+  },
+  "dependencies": {
+    "diff": "^5.2.0",
+    "kleur": "^4.1.5"
+  }
+}
