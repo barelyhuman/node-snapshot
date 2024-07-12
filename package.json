@@ -22,17 +22,21 @@
   "files": [
     "src"
   ],
+  "prettier": "@barelyhuman/prettier-config",
   "scripts": {
     "next": "bumpp",
     "publint": "publint",
-    "test": "echo 'done'"
+    "test": "echo 'done'",
+    "fix": "prettier --write ."
   },
   "dependencies": {
     "diff": "^5.2.0",
     "kleur": "^4.1.5"
   },
   "devDependencies": {
+    "@barelyhuman/prettier-config": "^1.1.0",
     "bumpp": "^9.4.1",
+    "prettier": "^3.3.2",
     "pretty-format": "^29.7.0",
     "publint": "^0.2.8"
   }
