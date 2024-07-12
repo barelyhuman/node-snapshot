@@ -1,10 +1,10 @@
-exports[`yo`]=`"make it rain"`
+exports[`yo`] = `"make it rain"`
 
-exports[`yo 2`]=`Object {
+exports[`yo 2`] = `Object {
   "name": 2,
 }`
 
-exports[`lols`]=`Array [
+exports[`lols`] = `Array [
   Object {
     "name": 1,
   },
@@ -12,4 +12,3 @@ exports[`lols`]=`Array [
     "name": 2,
   },
 ]`
-

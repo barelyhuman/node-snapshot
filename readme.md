@@ -4,10 +4,10 @@ a quick and dirty wrapper around node test context for snapshot testing
 
 **Beginners, this is not for you. **
 
-Enthusiatic developers who like to play around with things, **this is for you**!!
+Enthusiatic developers who like to play around with things, **this is for
+you**!!
 
-> [!NOTE:]
-> This package is **ESM** only
+> [!NOTE:] This package is **ESM** only
 
 ### Installation
 
@@ -18,16 +18,16 @@ Enthusiatic developers who like to play around with things, **this is for you**!
 ### Usage
 
 ```js
-import { test } from "node:test";
-import { snapshot } from "@barelyhuman/node-snapshot";
+import { test } from 'node:test'
+import { snapshot } from '@barelyhuman/node-snapshot'
 
-test("foo", (t) => {
-  snapshot(t, "bar");
+test('foo', t => {
+  snapshot(t, 'bar')
 
-  t.test("foo bar", (t) => {
-    snapshot(t, [{ foo: "bar" }]);
-  });
-});
+  t.test('foo bar', t => {
+    snapshot(t, [{ foo: 'bar' }])
+  })
+})
 ```
 
 ### LICENSE
