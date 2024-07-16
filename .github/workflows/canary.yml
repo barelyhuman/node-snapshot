@@ -1,9 +1,9 @@
-name: release
+name: canary
 on:
-  push:
-    tags:
-      - 'v*.*.*'
-
+  pull_request:
+    branches:
+      - 'main'
+    
 jobs:
   publish:
     runs-on: ubuntu-latest
@@ -18,26 +18,29 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
+
       - name: Test
         run: npm run test
+
       - name: Compile
         run: npm run build --if-present
-      - name: Get Package Version
-        id: get-package-version
-        uses: stevenbenitez/get-package-version-action@v1
+
       - name: Lint Package
         run: npm run package:lint
 
-      - name: Publish
-        run: |
-          npm publish --tag unsure
+      - name: Tag PR 
+        run: | 
+          npm version --preid pr.${{github.event.number}} prepatch
+          npm publish --tag pr-${{github.event.number}}
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-      - name: Tag Beta
-        if: contains(steps.get-package-version.outputs.version, '-beta')
-        run: |
-          npm dist-tags add @barelyhuman/node-snapshot@${{ steps.get-package-version.outputs.version }} beta
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-        
+      - name: Get Package Version
+        id: get-package-version
+        uses: stevenbenitez/get-package-version-action@v1
+
+      - name: PR Message
+        uses: mshick/add-pr-comment@v2
+        with:
+          message: |
+            Published new beta release: ${{ steps.get-package-version.outputs.version }}
