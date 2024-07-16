@@ -9,6 +9,8 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       pull-requests: write
+      contents: write
+
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -30,8 +32,9 @@ jobs:
 
       - name: Tag PR 
         run: | 
-          npm version --preid pr.${{github.event.number}} --no-git-tag-version prepatch
+          npm version --preid pr.${{github.event.number}} prepatch
           npm publish --tag pr-${{github.event.number}}
+          git push
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
