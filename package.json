@@ -6,6 +6,9 @@
     "test",
     "snapshot"
   ],
+  "publishConfig": {
+    "access": "public"
+  },
   "repository": "github.com/barelyhuman/node-snapshot",
   "license": "MIT",
   "author": "reaper<ahoy@barelyhuman.dev>",
