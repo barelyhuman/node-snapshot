@@ -30,7 +30,7 @@ jobs:
 
       - name: Tag PR 
         run: | 
-          npm version --preid pr.${{github.event.number}} prepatch
+          npm version --preid pr.${{github.event.number}} --no-git-tag-version prepatch
           npm publish --tag pr-${{github.event.number}}
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
