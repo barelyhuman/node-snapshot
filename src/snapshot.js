@@ -14,11 +14,12 @@ function getFileName() {
   const snapshotLineIndex = stackArr.findIndex(
     l => l.trim().indexOf('at snapshot') > -1
   )
-  const matched = stackArr[snapshotLineIndex + 1].match(/\((.+)\)$/)
 
+  const matched = stackArr[snapshotLineIndex + 1].match(/\((.+)\)$/)
   if (!matched) {
     return
   }
+
   const filePath = matched[1]
   const pathSplits = filePath.split(':')
   let lineNumber, col
@@ -43,7 +44,6 @@ function getFileName() {
 }
 
 const require = createRequire(import.meta.url)
-
 let fileTestCounter = new Map()
 
 function getFileCounterKey(filename, testName) {
