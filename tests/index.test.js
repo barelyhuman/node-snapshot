@@ -6,7 +6,7 @@ test('yo', t => {
 })
 
 test('yo 2', t => {
-  snapshot(t, { name: 3 })
+  snapshot(t, { name: 2 })
   snapshot(t, { name: 1 })
 })
 

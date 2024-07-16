@@ -1,7 +1,7 @@
 exports[`yo 1`]=`"make it rain"`
 
 exports[`yo 2 1`]=`Object {
-  "name": 3,
+  "name": 2,
 }`
 
 exports[`yo 2 2`]=`Object {
