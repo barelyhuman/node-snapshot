@@ -11,16 +11,11 @@ const REMOVED = k.red
 function getFileName() {
   const err = new Error()
   const stackArr = err.stack.split('\n')
-  let matched
-  stackArr.forEach((l, i) => {
-    if (l.toLowerCase() === 'error') {
-      return false
-    }
+  const snapshotLineIndex = stackArr.findIndex(
+    l => l.trim().indexOf('at snapshot') > -1
+  )
+  const matched = stackArr[snapshotLineIndex + 1].match(/\((.+)\)$/)
 
-    if (l.includes('snapshot')) {
-      matched = stackArr[i + 1].match(/\((.+)\)$/)
-    }
-  })
   if (!matched) {
     return
   }
@@ -49,14 +44,22 @@ function getFileName() {
 
 const require = createRequire(import.meta.url)
 
-export function snapsnot(
+let fileTestCounter = new Map()
+
+function getFileCounterKey(filename, testName) {
+  return `${filename}:${testName}`
+}
+
+export function snapshot(
   test,
   currentValue,
   errorMsg = 'Snapshot does not match'
 ) {
   const hasFileDetails = getFileName()
   const shouldUpdate = () => Number(process.env.UPDATE_SNAPSHOTS) === 1
+
   if (!hasFileDetails) return
+
   const { filename } = hasFileDetails
   const snapshotFileName = join(
     'snapshots',
@@ -69,15 +72,22 @@ export function snapsnot(
     snapshotName = test.name
   }
 
+  const fileCounterKey = getFileCounterKey(filename, test.fullName ?? test.name)
+  if (!fileTestCounter.has(fileCounterKey)) {
+    fileTestCounter.set(fileCounterKey, 0)
+  }
+
+  const currentCount = fileTestCounter.get(fileCounterKey)
+  snapshotName += ' ' + (Number(currentCount) + 1)
+  fileTestCounter.set(fileCounterKey, Number(currentCount) + 1)
+
   if (shouldUpdate()) {
-    process.nextTick(() =>
-      writeSnapshot(currentValue, snapshotFileName, snapshotName)
-    )
+    writeSnapshot(currentValue, snapshotFileName, snapshotName)
     return
   }
 
   if (existsSync(snapshotFileName)) {
-    const module = require('./' + snapshotFileName)
+    const module = require(join(process.cwd(), snapshotFileName))
     if (module[snapshotName]) {
       const _diff = diffTrimmedLines(format(currentValue), module[snapshotName])
       const hasChanges = _diff.filter(d => d.added || d.removed)
@@ -102,21 +112,20 @@ export function snapsnot(
       )
     }
   }
-  process.nextTick(() =>
-    writeSnapshot(currentValue, snapshotFileName, snapshotName)
-  )
+  writeSnapshot(currentValue, snapshotFileName, snapshotName)
 }
 
 function writeSnapshot(value, file, name) {
   if (!existsSync(file)) {
-    let data = (file, 'utf8')
+    let data = ''
     data += '\n\n'
     data += `exports[\`${name}\`]=\`${format(value)}\``
     mkdirSync(dirname(file), { recursive: true })
     writeFileSync(file, data, 'utf8')
     return
   }
-  const module = require('./' + file)
+  const modulePath = require.resolve(join(process.cwd(), file))
+  const module = require(modulePath)
   module[name] = format(value)
   let newContent = ''
   Object.keys(module).forEach(exp => {
