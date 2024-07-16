@@ -28,7 +28,7 @@
   "prettier": "@barelyhuman/prettier-config",
   "scripts": {
     "next": "bumpp",
-    "publint": "publint",
+    "package:lint": "publint",
     "test": "echo 'done'",
     "fix": "prettier --write ."
   },
