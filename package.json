@@ -22,7 +22,7 @@
   "scripts": {
     "next": "bumpp",
     "publint": "publint",
-    "test": "echo 'done'",
+    "test": "node --test",
     "fix": "prettier --write ."
   },
   "dependencies": {
