@@ -1,9 +1,8 @@
-import { diffTrimmedLines } from 'diff'
-import { existsSync, mkdirSync, writeFileSync } from 'node:fs'
-import { createRequire } from 'node:module'
-import { dirname, extname, join, relative } from 'node:path'
-import { format } from 'pretty-format'
-import k from 'kleur'
+const { diffTrimmedLines } = require('diff')
+const { existsSync, mkdirSync, writeFileSync } = require('node:fs')
+const { dirname, extname, join, relative } = require('node:path')
+const { format } = require('pretty-format')
+const k = require('kleur')
 
 const ADDED = k.green
 const REMOVED = k.red
@@ -42,19 +41,14 @@ function getFileName() {
   }
 }
 
-const require = createRequire(import.meta.url)
-
 let fileTestCounter = new Map()
 
 function getFileCounterKey(filename, testName) {
   return `${filename}:${testName}`
 }
 
-export function snapshot(
-  test,
-  currentValue,
-  errorMsg = 'Snapshot does not match'
-) {
+exports.snapshot = snapshot
+function snapshot(test, currentValue, errorMsg = 'Snapshot does not match') {
   const hasFileDetails = getFileName()
   const shouldUpdate = () => Number(process.env.UPDATE_SNAPSHOTS) === 1
 

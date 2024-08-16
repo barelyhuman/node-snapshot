@@ -7,9 +7,6 @@ a quick and dirty wrapper around node test context for snapshot testing
 Enthusiatic developers who like to play around with things, **this is for
 you**!!
 
-> [!NOTE] 
-> This package is **ESM** only
-
 ### Installation
 
 ```sh

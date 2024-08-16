@@ -12,14 +12,7 @@
   "repository": "github.com/barelyhuman/node-snapshot",
   "license": "MIT",
   "author": "reaper<ahoy@barelyhuman.dev>",
-  "type": "module",
-  "exports": {
-    "./package.json": "./package.json",
-    ".": {
-      "types": "./src/snapshot.d.ts",
-      "import": "./src/snapshot.js"
-    }
-  },
+  "type": "commonjs",
   "main": "./src/snapshot.js",
   "types": "./src/snapshot.d.ts",
   "files": [
@@ -34,13 +27,13 @@
   },
   "dependencies": {
     "diff": "^5.2.0",
-    "kleur": "^4.1.5"
+    "kleur": "^4.1.5",
+    "pretty-format": "^29.7.0"
   },
   "devDependencies": {
     "@barelyhuman/prettier-config": "^1.1.0",
     "bumpp": "^9.4.1",
     "prettier": "^3.3.2",
-    "pretty-format": "^29.7.0",
     "publint": "^0.2.8"
   }
 }

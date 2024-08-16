@@ -1,5 +1,5 @@
-import { test } from 'node:test'
-import { snapshot } from '../src/snapshot.js'
+const { test } = require('node:test')
+const { snapshot } = require('../src/snapshot.js')
 
 test('yo', t => {
   snapshot(t, 'make it rain')
