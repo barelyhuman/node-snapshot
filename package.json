@@ -1,15 +1,17 @@
 {
   "name": "@barelyhuman/node-snapshot",
   "version": "0.0.4-beta.1",
+  "description": "snapshot testing for node:test",
   "keywords": [
     "node",
     "test",
     "snapshot"
   ],
-  "publishConfig": {
-    "access": "public"
+  "homepage": "https://github.com/barelyhuman/node-snapshot/tree/main",
+  "bugs": {
+    "url": "https://github.com/barelyhuman/node-snapshot/issues"
   },
-  "repository": "github.com/barelyhuman/node-snapshot",
+  "repository": "https://github.com/barelyhuman/node-snapshot.git",
   "license": "MIT",
   "author": "reaper<ahoy@barelyhuman.dev>",
   "type": "commonjs",
@@ -18,13 +20,13 @@
   "files": [
     "src"
   ],
-  "prettier": "@barelyhuman/prettier-config",
   "scripts": {
+    "fix": "prettier --write .",
     "next": "bumpp",
     "package:lint": "publint",
-    "test": "node --test",
-    "fix": "prettier --write ."
+    "test": "node --test"
   },
+  "prettier": "@barelyhuman/prettier-config",
   "dependencies": {
     "diff": "^5.2.0",
     "kleur": "^4.1.5",
@@ -35,5 +37,11 @@
     "bumpp": "^9.4.1",
     "prettier": "^3.3.2",
     "publint": "^0.2.8"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }
