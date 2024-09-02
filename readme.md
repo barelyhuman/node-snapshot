@@ -11,7 +11,7 @@
 > [!IMPORTANT]  
 > The author of the library is trying to be a full time open source maintainer
 > and your support would be greatly appreciated. You can find out how by reading
-> the following (reaper.is/supporters)[https://reaper.is/supporters]
+> the following [reaper.is/supporters](https://reaper.is/supporters)
 
 ### Installation
 
