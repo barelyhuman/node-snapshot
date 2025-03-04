@@ -1,6 +1,6 @@
 {
   "name": "@barelyhuman/node-snapshot",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "snapshot testing for node:test",
   "keywords": [
     "node",
