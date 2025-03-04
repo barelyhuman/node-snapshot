@@ -1,7 +1,7 @@
 const { diffTrimmedLines } = require('diff')
 const { existsSync, mkdirSync, writeFileSync } = require('node:fs')
 const { dirname, extname, join, relative } = require('node:path')
-const { format } = require('pretty-format')
+const { format, plugins: prettyFormatPlugins } = require('pretty-format')
 const k = require('kleur')
 
 const ADDED = k.green
@@ -113,17 +113,46 @@ function writeSnapshot(value, file, name) {
   if (!existsSync(file)) {
     let data = ''
     data += '\n\n'
-    data += `exports[\`${name}\`]=\`${format(value)}\``
+    data += `exports.[${JSON.stringify(name)}] = \`${formatValue(value)}\``
     mkdirSync(dirname(file), { recursive: true })
     writeFileSync(file, data, 'utf8')
     return
   }
-  const modulePath = require.resolve(join(process.cwd(), file))
-  const module = require(modulePath)
-  module[name] = format(value)
+  const module = require(join(process.cwd(), file))
+  module[name] = formatValue(value)
   let newContent = ''
   Object.keys(module).forEach(exp => {
-    newContent += `exports[\`${exp}\`]=\`${module[exp]}\`\n\n`
+    newContent += `exports[${JSON.stringify(exp)}] = \`${module[exp]}\`\n\n`
   })
   writeFileSync(file, newContent, 'utf8')
+}
+
+function formatValue(value) {
+  const {
+    DOMCollection,
+    DOMElement,
+    Immutable,
+    ReactElement,
+    ReactTestComponent,
+    AsymmetricMatcher,
+  } = prettyFormatPlugins
+  return normalizeNewlines(
+    format(value, {
+      escapeRegex: true,
+      indent: 2,
+      escapeString: false,
+      plugins: [
+        DOMCollection,
+        DOMElement,
+        Immutable,
+        ReactElement,
+        ReactTestComponent,
+        AsymmetricMatcher,
+      ],
+    })
+  ).replaceAll(/[`]/g, '\\`')
+}
+
+function normalizeNewlines(str) {
+  return str.replaceAll(/\r\n|\r/g, '\n')
 }
