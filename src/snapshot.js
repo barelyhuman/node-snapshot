@@ -1,11 +1,14 @@
-const { diffTrimmedLines } = require('diff')
-const { existsSync, mkdirSync, writeFileSync } = require('node:fs')
-const { dirname, extname, join, relative } = require('node:path')
-const { format } = require('pretty-format')
-const k = require('kleur')
+import { diffTrimmedLines } from 'diff'
+import k from 'kleur'
+import { existsSync, mkdirSync, writeFileSync } from 'node:fs'
+import { createRequire } from 'node:module'
+import { dirname, extname, join, relative } from 'node:path'
+import { format, plugins as prettyFormatPlugins } from 'pretty-format'
 
 const ADDED = k.green
 const REMOVED = k.red
+
+const require = createRequire(import.meta.url)
 
 function getFileName() {
   const err = new Error()
@@ -47,8 +50,11 @@ function getFileCounterKey(filename, testName) {
   return `${filename}:${testName}`
 }
 
-exports.snapshot = snapshot
-function snapshot(test, currentValue, errorMsg = 'Snapshot does not match') {
+export function snapshot(
+  test,
+  currentValue,
+  errorMsg = 'Snapshot does not match'
+) {
   const hasFileDetails = getFileName()
   const shouldUpdate = () => Number(process.env.UPDATE_SNAPSHOTS) === 1
 
@@ -83,7 +89,10 @@ function snapshot(test, currentValue, errorMsg = 'Snapshot does not match') {
   if (existsSync(snapshotFileName)) {
     const module = require(join(process.cwd(), snapshotFileName))
     if (module[snapshotName]) {
-      const _diff = diffTrimmedLines(format(currentValue), module[snapshotName])
+      const _diff = diffTrimmedLines(
+        formatValue(currentValue).replace(/\\\`/g, '`'),
+        module[snapshotName]
+      )
       const hasChanges = _diff.filter(d => d.added || d.removed)
       if (hasChanges.length) {
         let changeText = k.reset('\n')
@@ -106,24 +115,52 @@ function snapshot(test, currentValue, errorMsg = 'Snapshot does not match') {
       )
     }
   }
-  writeSnapshot(currentValue, snapshotFileName, snapshotName)
 }
 
 function writeSnapshot(value, file, name) {
   if (!existsSync(file)) {
     let data = ''
     data += '\n\n'
-    data += `exports[\`${name}\`]=\`${format(value)}\``
+    data += `exports.[${JSON.stringify(name)}] = \`${formatValue(value)}\``
     mkdirSync(dirname(file), { recursive: true })
     writeFileSync(file, data, 'utf8')
     return
   }
-  const modulePath = require.resolve(join(process.cwd(), file))
-  const module = require(modulePath)
-  module[name] = format(value)
+  const module = require(join(process.cwd(), file))
+  module[name] = formatValue(value)
   let newContent = ''
   Object.keys(module).forEach(exp => {
-    newContent += `exports[\`${exp}\`]=\`${module[exp]}\`\n\n`
+    newContent += `exports[${JSON.stringify(exp)}] = \`${module[exp]}\`\n\n`
   })
   writeFileSync(file, newContent, 'utf8')
+}
+
+function formatValue(value) {
+  const {
+    DOMCollection,
+    DOMElement,
+    Immutable,
+    ReactElement,
+    ReactTestComponent,
+    AsymmetricMatcher,
+  } = prettyFormatPlugins
+  return normalizeNewlines(
+    format(value, {
+      escapeRegex: true,
+      indent: 2,
+      escapeString: false,
+      plugins: [
+        DOMCollection,
+        DOMElement,
+        Immutable,
+        ReactElement,
+        ReactTestComponent,
+        AsymmetricMatcher,
+      ],
+    })
+  ).replaceAll(/[`]/g, '\\`')
+}
+
+function normalizeNewlines(str) {
+  return str.replaceAll(/\r\n|\r/g, '\n')
 }

@@ -7,6 +7,7 @@
     "test",
     "snapshot"
   ],
+  "type":"module",
   "homepage": "https://github.com/barelyhuman/node-snapshot/tree/main",
   "bugs": {
     "url": "https://github.com/barelyhuman/node-snapshot/issues"
@@ -14,8 +15,7 @@
   "repository": "https://github.com/barelyhuman/node-snapshot.git",
   "license": "MIT",
   "author": "reaper<ahoy@barelyhuman.dev>",
-  "type": "commonjs",
-  "main": "./src/snapshot.js",
+  "exports": "./src/snapshot.js",
   "types": "./src/snapshot.d.ts",
   "files": [
     "src"
