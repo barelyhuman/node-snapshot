@@ -121,7 +121,7 @@ function writeSnapshot(value, file, name) {
   if (!existsSync(file)) {
     let data = ''
     data += '\n\n'
-    data += `exports.[${JSON.stringify(name)}] = \`${formatValue(value)}\``
+    data += `exports[${JSON.stringify(name)}] = \`${formatValue(value)}\``
     mkdirSync(dirname(file), { recursive: true })
     writeFileSync(file, data, 'utf8')
     return
