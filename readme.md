@@ -2,6 +2,11 @@
 
 > A minimal Jest like snapshot testing helper for node:test
 
+> [!NOTE]
+>
+> This library is now ESM ONLY (since v1.0.0), use v0 if you wish to stick to
+> CJS
+
 > [!NOTE]  
 > The Library is under active development and might have bugs and issues, please
 > report them at
@@ -22,18 +27,6 @@
 ### Usage
 
 ```js
-// CJS
-const { test } = require('node:test')
-const { snapshot } = require('@barelyhuman/node-snapshot')
-
-test('foo', t => {
-  snapshot(t, 'bar')
-
-  t.test('foo bar', t => {
-    snapshot(t, [{ foo: 'bar' }])
-  })
-})
-
 // ESM
 import { test } from 'node:test'
 import { snapshot } from '@barelyhuman/node-snapshot'
