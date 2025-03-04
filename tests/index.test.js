@@ -1,38 +1,52 @@
 import { test } from 'node:test'
 import { snapshot } from '../src/snapshot.js'
 
-test('yo', t => {
-  snapshot(t, 'make it rain')
+test('array test', t => {
+  snapshot(t, [1, 2, 3, 4, 5])
 })
 
-test('yo 2', t => {
-  snapshot(t, { name: 3 })
-  snapshot(t, { name: 1 })
-})
-
-test('for', t => {
-  t.test('lols', t => {
-    snapshot(t, [{ name: 1 }, { name: 2 }])
+test('nested objects', t => {
+  snapshot(t, {
+    user: {
+      name: 'John',
+      address: {
+        street: '123 Main St',
+        city: 'Somewhere',
+      },
+    },
   })
 })
 
-test('html', t => {
+test('mixed types', t => {
+  snapshot(t, {
+    string: 'hello',
+    number: 42,
+    boolean: true,
+    array: [1, 'two', false],
+    null: null,
+  })
+})
+
+test('nested tests', t => {
+  t.test('level 1', t => {
+    t.test('level 2', t => {
+      snapshot(t, 'nested three levels deep')
+    })
+  })
+})
+
+test('multiline string', t => {
   snapshot(
     t,
-    `<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-
-</body>
-</html>`
+    `
+    function example() {
+      console.log('hello');
+      return true;
+    }
+  `
   )
 })
 
-test('js', t => {
-  snapshot(t, 'module.exports = ()=>{return `some-string` }')
+test('special characters', t => {
+  snapshot(t, 'Special chars: ©®™€£¥§π∆')
 })

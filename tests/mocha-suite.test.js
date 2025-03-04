@@ -19,3 +19,44 @@ describe('for', () => {
     snapshot(ctx, [{ name: 1 }, { name: 2 }])
   })
 })
+
+describe('arrays', () => {
+  it('should handle empty arrays', ctx => {
+    snapshot(ctx, [])
+  })
+
+  it('should handle nested arrays', ctx => {
+    snapshot(ctx, [
+      [1, 2],
+      [3, 4],
+    ])
+  })
+})
+
+describe('objects', () => {
+  it('should handle nested objects', ctx => {
+    snapshot(ctx, {
+      user: {
+        name: 'test',
+        profile: {
+          age: 25,
+        },
+      },
+    })
+  })
+
+  it('should handle null values', ctx => {
+    snapshot(ctx, { value: null })
+  })
+})
+
+describe('primitives', () => {
+  it('should handle numbers', ctx => {
+    snapshot(ctx, 42)
+  })
+
+  it('should handle booleans', ctx => {
+    snapshot(ctx, true)
+    snapshot(ctx, false)
+  })
+})
