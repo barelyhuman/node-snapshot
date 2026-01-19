@@ -28,13 +28,13 @@
   },
   "prettier": "@barelyhuman/prettier-config",
   "dependencies": {
-    "diff": "^5.2.0",
+    "diff": "^8.0.3",
     "kleur": "^4.1.5",
     "pretty-format": "^29.7.0"
   },
   "devDependencies": {
     "@barelyhuman/prettier-config": "^1.1.0",
-    "bumpp": "^9.4.1",
+    "bumpp": "^10.4.0",
     "glob": "^11.0.1",
     "prettier": "^3.3.2",
     "publint": "^0.2.8"

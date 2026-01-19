@@ -1,4 +1,4 @@
-exports['array test 1'] = `Array [
+exports["array test 1"] = `Array [
   1,
   2,
   3,
@@ -6,7 +6,7 @@ exports['array test 1'] = `Array [
   5,
 ]`
 
-exports['nested objects 1'] = `Object {
+exports["nested objects 1"] = `Object {
   "user": Object {
     "address": Object {
       "city": "Somewhere",
@@ -16,7 +16,7 @@ exports['nested objects 1'] = `Object {
   },
 }`
 
-exports['mixed types 1'] = `Object {
+exports["mixed types 1"] = `Object {
   "array": Array [
     1,
     "two",
@@ -28,13 +28,14 @@ exports['mixed types 1'] = `Object {
   "string": "hello",
 }`
 
-exports['level 2 1'] = `"nested three levels deep"`
+exports["level 2 1"] = `"nested three levels deep"`
 
-exports['multiline string 1'] = `"
+exports["multiline string 1"] = `"
     function example() {
       console.log('hello');
       return true;
     }
   "`
 
-exports['special characters 1'] = `"Special chars: ©®™€£¥§π∆"`
+exports["special characters 1"] = `"Special chars: ©®™€£¥§π∆"`
+
