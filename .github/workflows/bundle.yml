@@ -1,0 +1,23 @@
+name: Boris Bundle Tracker
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, closed]
+
+jobs:
+  bundle-size:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Collect sizes & report to Boris
+        uses: ./.github/actions/boris-bundle-tracker
+        with:
+          api-key: ${{ secrets.BORIS_API_KEY }}
