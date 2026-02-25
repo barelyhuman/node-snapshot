@@ -3,45 +3,89 @@ import k from 'kleur'
 import { existsSync, mkdirSync, writeFileSync } from 'node:fs'
 import { createRequire } from 'node:module'
 import { dirname, extname, join, relative } from 'node:path'
+import { fileURLToPath } from 'node:url'
 import { format, plugins as prettyFormatPlugins } from 'pretty-format'
 
 const ADDED = k.green
 const REMOVED = k.red
 
 const require = createRequire(import.meta.url)
+const CURRENT_FILE = fileURLToPath(import.meta.url)
+
+function normalizeStackPath(pathname) {
+  if (pathname.startsWith('file://')) {
+    let normalizedPath = fileURLToPath(pathname)
+    if (process.platform === 'win32') {
+      normalizedPath = normalizedPath.replace(/^\\/, '')
+    }
+    return normalizedPath
+  }
+  return pathname
+}
+
+function parseStackFrame(stackLine) {
+  const line = stackLine.trim()
+  if (!line.startsWith('at ')) {
+    return
+  }
+
+  const withParens = line.match(/\((.*)\)$/)
+  const location = withParens
+    ? withParens[1]
+    : line.replace(/^at\s+/, '').split(/\s+/).at(-1)
+
+  if (!location) {
+    return
+  }
+
+  const locationMatch = location.match(/^(.*):(\d+):(\d+)$/)
+  if (!locationMatch) {
+    return
+  }
+
+  const [, rawFilename, lineNumber, colNumber] = locationMatch
+  return {
+    filename: normalizeStackPath(rawFilename),
+    line: lineNumber,
+    col: colNumber,
+  }
+}
 
 function getFileName() {
   const err = new Error()
-  const stackArr = err.stack.split('\n')
-  const snapshotLineIndex = stackArr.findIndex(
-    l => l.trim().indexOf('at snapshot') > -1
-  )
-  const matched = stackArr[snapshotLineIndex + 1].match(/\((.+)\)$/)
-
-  if (!matched) {
+  if (!err.stack) {
     return
   }
-  const filePath = matched[1]
-  const pathSplits = filePath.split(':')
-  let lineNumber, col
-  pathSplits.reverse().forEach((i, ind) => {
-    if (ind === 0 && !isNaN(+i)) {
-      col = i
-    }
-    if (ind === 1 && !isNaN(+i)) {
-      lineNumber = i
-    }
-  })
 
-  const sanitizedFilePath = filePath
-    .replace(`:${lineNumber}:${col}`, '')
-    .replace('file://', '')
+  const stackFrames = err.stack
+    .split('\n')
+    .map(parseStackFrame)
+    .filter(Boolean)
 
-  return {
-    filename: sanitizedFilePath,
-    line: lineNumber,
-    col: col,
+  const snapshotFrameIndex = stackFrames.findIndex(
+    frame => frame.filename === CURRENT_FILE
+  )
+
+  let callerFrame
+  if (snapshotFrameIndex > -1) {
+    callerFrame = stackFrames
+      .slice(snapshotFrameIndex + 1)
+      .find(frame => frame.filename !== CURRENT_FILE)
   }
+
+  if (!callerFrame) {
+    callerFrame = stackFrames.find(
+      frame =>
+        frame.filename !== CURRENT_FILE &&
+        !frame.filename.startsWith('node:internal')
+    )
+  }
+
+  if (!callerFrame) {
+    return
+  }
+
+  return callerFrame
 }
 
 let fileTestCounter = new Map()
