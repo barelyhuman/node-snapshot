@@ -205,7 +205,7 @@ function defaultBuildCommand(pm) {
   if (pm === "pnpm") return "pnpm run build";
   if (pm === "yarn") return "yarn build";
   if (pm === "bun") return "bun run build";
-  return "npm run build";
+  return "npm run build --if-present";
 }
 
 /**
