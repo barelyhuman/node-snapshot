@@ -205,7 +205,7 @@ function defaultBuildCommand(pm) {
   if (pm === "pnpm") return "pnpm run build";
   if (pm === "yarn") return "yarn build";
   if (pm === "bun") return "bun run build";
-  return "npm run build";
+  return "npm run build --if-present";
 }
 
 /**
@@ -450,17 +450,20 @@ async function main() {
     encoding: "utf8",
   }).trim();
 
+  let mainSnapshot = []
+
   try {
     run(`git fetch --no-tags origin ${baseBranch}`, workingDirectory);
     run(`git checkout --force origin/${baseBranch}`, workingDirectory);
 
     run(installCommand, workingDirectory);
     run(buildCommand, workingDirectory);
+    mainSnapshot = collectSnapshot(workingDirectory)
   } finally {
     run(`git checkout --force ${startingSha}`, workingDirectory);
   }
 
-  const mainSnapshot = collectSnapshot(workingDirectory);
+  
   const payload = {
     repository,
     prNumber,

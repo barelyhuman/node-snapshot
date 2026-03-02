@@ -24,4 +24,4 @@ outputs:
     description: "Number of package evolution records created by the API"
 runs:
   using: "node20"
-  main: "index.js"
+  main: "index.cjs"
